@@ -6,7 +6,7 @@ psql -U postgres (password: Campbell1!)
 const express = require("express");
 const app = express();
 
-const router = require("../routes/router.js");
+const router = require("./routes/router.js");
 
 const PORT = 3000;
 
