@@ -1,8 +1,14 @@
 const pool = require("./pool")
 
 async function getExpensesFromDB() {
-    const { rows } = await pool.query('SELECT * FROM expenses');
+  try {
+    const { rows } = await pool.query("SELECT * FROM expenses");
+    console.log("Fetched rows:", rows);
     return rows;
+  } catch (err) {
+    console.error("Error in getExpensesFromDB:", err); // <- detailed log
+    throw err; // re-throw so your controller still catches it
+  }
 }
 
 async function getExpenseFromDB(expense_id) {

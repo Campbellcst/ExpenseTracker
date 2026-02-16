@@ -14,7 +14,7 @@ async function getExpenses(req, res) {
 //view one expense
 async function getExpense(req, res) {
   try {
-    const id = req.params.id;
+    const id = req.params.id; 
     const expenses = await db.getExpenseFromDB(id);
     res.json(expenses);
   } catch (err) {
@@ -85,34 +85,3 @@ module.exports = {
     updateExpense,
     deleteExpense
 };
-
-/*
-    id: 1,
-    title: "Grocery Shopping",
-    amount: 55.20,
-    category: "Food",
-    date: "12-12-2025"
-    
-    id: 2,
-    title: "Monthly Rent",
-    amount: 1200,
-    category: "Housing",
-    date: "1-20-2026"
-
-    id: 3,
-    title: "Gas Station",
-    amount: 45.00,
-    category: "Transportation",
-    date: "1-25-2026"
-
-
-CREATE TABLE expenses (
-    id SERIAL PRIMARY KEY,
-    title TEXT,
-    amount NUMERIC(10,2), 10 is max digits, 2 is max digits after the decimal
-    category VARCHAR(50),
-    expenses_date DATE
-);
-
-INSERT INTO expenses (title, amount, category, expenses_date) VALUES  ('Grocery Shopping', 55.20, 'Food', '12-12-2025'), ('Monethly Rent', 1200, 'Housing', '1-20-2026'), ('Gas Station', 45.00, 'Transportation', '1-25-2026');
-*/

@@ -1,8 +1,9 @@
-/* -- How to Connect to DB -- 
-psql -U postgres (password: Campbell1!)
-\c expenses_db
-*/ 
-
+const path = require("path");
+require("dotenv").config({ path: path.resolve(__dirname, ".env") });
+ 
+const pool = require("../database/pool.js"); 
+console.log(process.env.DB_PASSWORD);
+console.log(process.env.DB_HOST);
 const express = require("express");
 const app = express();
 
