@@ -16,6 +16,10 @@ async function getExpense(req, res) {
   try {
     const id = req.params.id; 
     const expenses = await db.getExpenseFromDB(id);
+    if (expenses.length == 0) {
+      return res.status(404).json({ error: "expense not found" });
+    }
+
     res.json(expenses);
   } catch (err) {
     console.error(err);
@@ -32,10 +36,9 @@ async function addExpense(req, res) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    await db.addExpenseFromDB(title, amount, category, expenses_date);
+    const expenses = await db.addExpenseFromDB(title, amount, category, expenses_date);
 
-    // No returned row, so just send a success message
-    res.status(201).json({ message: "Expense added successfully" });
+    res.json(expenses);
   } catch (err) {
     console.error("Error adding expense:", err);
     res.status(500).json({ error: "Failed to add expense" });
@@ -52,9 +55,13 @@ async function updateExpense(req, res) {
       return res.status(400).json({ error: "All fields are required" });
     }
 
-    await db.updateExpenseFromDB(id, title, amount, category, expenses_date);
+    const expenses = await db.updateExpenseFromDB(id, title, amount, category, expenses_date);
 
-    res.json({ message: "Expense updated successfully" });
+    if (expenses.length == 0) {
+      return res.status(404).json({ error: "expense not found" });
+    }
+
+    res.json(expenses);
   } catch (err) {
     console.error("Error updating expense:", err);
     res.status(500).json({ error: "Failed to update expense" });
@@ -65,16 +72,20 @@ async function updateExpense(req, res) {
 
 //delete expense
 async function deleteExpense(req, res) {
+  const id = req.params.id;
+
   try {
-    const id = req.params.id;
+    const expenses = await db.deleteExpenseFromDB(id);
 
-    await db.deleteExpenseFromDB(id);
+    if (expenses.length === 0) {
+      return res.status(404).json({ error: `Expense ${id} not found` });
+    }
 
-    // No returned row, just send a success message
-    res.json({ message: "Expense deleted successfully" });
+    res.json(expenses);
+
   } catch (err) {
     console.error("Error deleting expense:", err);
-    res.status(500).json({ error: "Failed to delete expense" });
+    res.status(500).json({ error: `Failed to delete expense ${id}` });
   }
 }
 

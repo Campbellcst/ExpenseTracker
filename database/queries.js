@@ -17,19 +17,22 @@ async function getExpenseFromDB(expense_id) {
 }
 
 async function addExpenseFromDB(title, amount, category, expenses_date) {
-    await pool.query(
-        'INSERT INTO expenses (title, amount, category, expenses_date) VALUES ($1, $2, $3, $4)', 
+    const { rows } = await pool.query(
+        'INSERT INTO expenses (title, amount, category, expenses_date) VALUES ($1, $2, $3, $4) RETURNING *', 
         [title, amount, category, expenses_date]);
+    return rows;
 } 
 
 async function updateExpenseFromDB(id, title, amount, category, expenses_date) {
-    await pool.query(
-        'UPDATE expenses SET title=$1, amount=$2, category=$3, expenses_date=$4 WHERE id=$5', 
+    const { rows } = await pool.query(
+        'UPDATE expenses SET title=$1, amount=$2, category=$3, expenses_date=$4 WHERE id=$5 RETURNING *', 
         [title, amount, category, expenses_date, id]);
+    return rows;
 }
 
 async function deleteExpenseFromDB(expense_id) {
-    await pool.query('DELETE FROM expenses WHERE id=$1', [expense_id]);
+    const { rows } = await pool.query('DELETE FROM expenses WHERE id=$1 RETURNING *', [expense_id]);
+    return rows;
 }
 
 module.exports = {
